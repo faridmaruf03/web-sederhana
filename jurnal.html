@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curhatika</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8B6B4A;
+            --secondary: #D4BFA8;
+            --accent: #A67C52;
+            --light: #F5EFE6;
+            --dark: #3A3226;
+            --shadow: 0 15px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+            padding: 20px;
+        }
+
+        .luxury-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* Panel Samping */
+        .luxury-sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .brand:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: var(--secondary);
+        }
+
+        .mood-selector {
+            margin: 2rem 0;
+        }
+
+        .mood-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .mood-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .mood-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .mood-option:hover {
+            transform: scale(1.1);
+        }
+
+        .mood-option.selected {
+            transform: scale(1.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .journal-list {
+            margin-top: 2rem;
+        }
+
+        .journal-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .journal-item:hover {
+            padding-left: 5px;
+        }
+
+        .journal-date {
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+        }
+
+        .journal-preview {
+            font-size: 0.9rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Konten Utama */
+        .luxury-main {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .journal-header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .journal-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .journal-date-display {
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .current-mood {
+            position: absolute;
+            right: 2rem;
+            top: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .journal-content {
+            padding: 2rem;
+        }
+
+        .journal-text {
+            min-height: 200px;
+            width: 100%;
+            border: none;
+            resize: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .journal-text:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Fitur Saran */
+        .suggestion-box {
+            background: rgba(212, 191, 168, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .suggestion-box h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .suggestion-box p {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .suggestion-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .suggestion-btn {
+            background: rgba(139, 107, 74, 0.1);
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .suggestion-btn:hover {
+            background: rgba(139, 107, 74, 0.2);
+        }
+
+        /* Fitur Pelacakan Kebiasaan */
+        .habit-tracker {
+            margin-top: 1rem;
+            border-radius: 10px;
+            padding: 1.5rem;
+            background: rgba(212, 191, 168, 0.1);
+        }
+
+        .habit-tracker h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .habit-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .habit-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .habit-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(139, 107, 74, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 107, 74, 0.3);
+        }
+
+        /* Responsif */
+        @media (max-width: 768px) {
+            .luxury-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .luxury-sidebar {
+                position: static;
+            }
+            
+            .habit-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="luxury-container">
+        <!-- Panel Samping -->
+        <div class="luxury-sidebar">
+            <div class="brand">Curhatika</div>
+            
+            <button id="newEntryBtn" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">
+                <i class="fas fa-plus"></i> Entri Baru
+            </button>
+            
+            <div class="mood-selector">
+                <div class="mood-title">Suasana Hari Ini</div>
+                <div class="mood-options">
+                    <div class="mood-option" data-mood="marah" style="background: #FF6B6B;"><i class="fas fa-angry"></i></div>
+                    <div class="mood-option" data-mood="sedih" style="background: #FFA36B;"><i class="fas fa-frown"></i></div>
+                    <div class="mood-option selected" data-mood="biasa" style="background: #FFD56B;"><i class="fas fa-meh"></i></div>
+                    <div class="mood-option" data-mood="senang" style="background: #8BD48B;"><i class="fas fa-smile"></i></div>
+                    <div class="mood-option" data-mood="sangat senang" style="background: #6BA3FF;"><i class="fas fa-laugh"></i></div>
+                </div>
+            </div>
+            
+            <div id="journalEntries" class="journal-list">
+                <!-- Entri jurnal akan dimuat di sini -->
+                <div class="empty-message">Belum ada entri catatan</div>
+            </div>
+        </div>
+        
+        <!-- Konten Utama -->
+        <div class="luxury-main">
+            <div class="journal-header">
+                <h2 id="journalTitle" contenteditable="true">Refleksi Hari Ini</h2>
+                <div id="journalDate" class="journal-date-display">Minggu, 4 Februari 2024</div>
+                <div id="currentMood" class="current-mood" style="background: rgba(255, 213, 107, 0.3);">
+                    <i class="fas fa-meh"></i>
+                </div>
+            </div>
+            
+            <div class="journal-content">
+                <!-- Fitur Saran -->
+                <div id="suggestionBox" class="suggestion-box">
+                    <h4><i class="fas fa-lightbulb"></i> Saran Untuk Anda</h4>
+                    <p id="suggestionText">Berdasarkan suasana hati Anda, berikut beberapa ide yang bisa Anda tulis...</p>
+                    <div class="suggestion-actions">
+                        <button id="useSuggestionBtn" class="suggestion-btn">Gunakan Saran</button>
+                        <button id="newSuggestionBtn" class="suggestion-btn">Saran Lain</button>
+                        <button id="dismissSuggestionBtn" class="suggestion-btn">Tutup</button>
+                    </div>
+                </div>
+                
+                <textarea id="journalText" class="journal-text" placeholder="Tulis pikiranmu di sini..."></textarea>
+                
+                <!-- Fitur Pelacakan Kebiasaan -->
+                <div class="habit-tracker">
+                    <h3><i class="fas fa-check-circle"></i> Kebiasaan Hari Ini</h3>
+                    <div class="habit-list">
+                        <div class="habit-item">
+                            <input type="checkbox" id="habit1" class="habit-checkbox">
+                            <label for="habit1">Olahraga</label>
+                        </div>
+                        <div class="habit-item">
+                            <input type="checkbox" id="habit2" class="habit-checkbox">
+                            <label for="habit2">Minum air</label>
+                        </div>
+                        <div class="habit-item">
+                            <input type="checkbox" id="habit3" class="habit-checkbox">
+                            <label for="habit3">Membaca</label>
+                        </div>
+                        <div class="habit-item">
+                            <input type="checkbox" id="habit4" class="habit-checkbox">
+                            <label for="habit4">Tidur cukup</label>
+                        </div>
+                        <div class="habit-item">
+                            <input type="checkbox" id="habit5" class="habit-checkbox">
+                            <label for="habit5">Meditasi</label>
+                        </div>
+                        <div class="habit-item">
+                            <input type="checkbox" id="habit6" class="habit-checkbox">
+                            <label for="habit6">Makan sehat</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="discardBtn" class="btn btn-outline">
+                        <i class="fas fa-trash"></i> Hapus
+                    </button>
+                    <button id="saveBtn" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan Entri
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data jurnal disimpan di localStorage
+        let journals = JSON.parse(localStorage.getItem('journals')) || [];
+        let currentJournal = null;
+        let selectedMood = 'biasa';
+
+        // Elemen DOM
+        const moodOptions = document.querySelectorAll('.mood-option');
+        const currentMoodEl = document.getElementById('currentMood');
+        const journalTitleEl = document.getElementById('journalTitle');
+        const journalTextEl = document.getElementById('journalText');
+        const journalDateEl = document.getElementById('journalDate');
+        const journalEntriesEl = document.getElementById('journalEntries');
+        const newEntryBtn = document.getElementById('newEntryBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const discardBtn = document.getElementById('discardBtn');
+        const habitCheckboxes = document.querySelectorAll('.habit-checkbox');
+        const suggestionBox = document.getElementById('suggestionBox');
+        const suggestionText = document.getElementById('suggestionText');
+        const useSuggestionBtn = document.getElementById('useSuggestionBtn');
+        const newSuggestionBtn = document.getElementById('newSuggestionBtn');
+        const dismissSuggestionBtn = document.getElementById('dismissSuggestionBtn');
+
+        // Database saran berdasarkan mood
+        const suggestions = {
+            marah: [
+                "Apa yang memicu kemarahan Anda hari ini? Bagaimana Anda menanggapi situasi tersebut?",
+                "Coba tuliskan 3 hal yang bisa Anda lakukan untuk menenangkan diri saat merasa marah.",
+                "Bagaimana perasaan Anda setelah kemarahan mereda? Apakah ada pelajaran yang bisa diambil?"
+            ],
+            sedih: [
+                "Apa yang membuat Anda merasa sedih hari ini? Bagaimana Anda menghadapinya?",
+                "Tuliskan 3 hal kecil yang masih bisa Anda syukuri hari ini meskipun sedang sedih.",
+                "Apa yang biasanya bisa membuat Anda merasa lebih baik saat sedih?"
+            ],
+            biasa: [
+                "Bagaimana hari Anda berjalan? Adakah momen kecil yang membuat Anda tersenyum?",
+                "Apa pencapaian kecil yang Anda dapatkan hari ini, sekecil apapun itu?",
+                "Jika Anda bisa mengubah satu hal tentang hari ini, apa yang akan itu dan mengapa?"
+            ],
+            senang: [
+                "Apa yang membuat Anda merasa senang hari ini? Ceritakan detailnya!",
+                "Bagaimana Anda bisa menciptakan lebih banyak momen seperti ini di masa depan?",
+                "Siapa yang terlibat dalam momen bahagia Anda hari ini? Bagaimana mereka berkontribusi?"
+            ],
+            "sangat senang": [
+                "Ini hari yang luar biasa! Ceritakan semua hal menyenangkan yang terjadi!",
+                "Apa puncak kebahagiaan Anda hari ini? Mengapa momen itu begitu spesial?",
+                "Bagaimana Anda bisa berbagi kebahagiaan ini dengan orang lain?"
+            ]
+        };
+
+        // Format tanggal
+        function formatDate(date) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('id-ID', options);
+        }
+
+        // Generate saran acak berdasarkan mood
+        function generateSuggestion(mood) {
+            const moodSuggestions = suggestions[mood] || suggestions['biasa'];
+            const randomIndex = Math.floor(Math.random() * moodSuggestions.length);
+            return moodSuggestions[randomIndex];
+        }
+
+        // Tampilkan saran
+        function showSuggestion() {
+            const suggestion = generateSuggestion(selectedMood);
+            suggestionText.textContent = suggestion;
+            suggestionBox.style.display = 'block';
+        }
+
+        // Update tampilan tanggal
+        journalDateEl.textContent = formatDate(new Date());
+
+        // Pemilihan Mood
+        moodOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                moodOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                const icon = this.innerHTML;
+                const bgColor = this.style.backgroundColor;
+                const mood = this.getAttribute('data-mood');
+                
+                currentMoodEl.innerHTML = icon;
+                currentMoodEl.style.background = bgColor.replace(')', ', 0.3)').replace('rgb', 'rgba');
+                selectedMood = mood;
+                
+                // Update saran jika box sedang terbuka
+                if (suggestionBox.style.display === 'block') {
+                    showSuggestion();
+                }
+            });
+        });
+
+        // Buat entri baru
+        function createNewJournal() {
+            currentJournal = {
+                id: Date.now(),
+                title: 'Refleksi Hari Ini',
+                content: '',
+                mood: selectedMood,
+                date: new Date().toISOString(),
+                habits: {
+                    olahraga: false,
+                    minum_air: false,
+                    membaca: false,
+                    tidur_cukup: false,
+                    meditasi: false,
+                    makan_sehat: false
+                }
+            };
+            
+            journalTitleEl.textContent = currentJournal.title;
+            journalTextEl.value = '';
+            journalDateEl.textContent = formatDate(new Date(currentJournal.date));
+            
+            // Reset checkbox kebiasaan
+            habitCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Set mood ke default
+            moodOptions[2].click();
+            
+            // Tampilkan saran
+            showSuggestion();
+        }
+
+        // Simpan entri jurnal
+        function saveJournal() {
+            if (!currentJournal) return;
+            
+            currentJournal.title = journalTitleEl.textContent;
+            currentJournal.content = journalTextEl.value;
+            currentJournal.mood = selectedMood;
+            
+            // Simpan kebiasaan
+            currentJournal.habits = {
+                olahraga: document.getElementById('habit1').checked,
+                minum_air: document.getElementById('habit2').checked,
+                membaca: document.getElementById('habit3').checked,
+                tidur_cukup: document.getElementById('habit4').checked,
+                meditasi: document.getElementById('habit5').checked,
+                makan_sehat: document.getElementById('habit6').checked
+            };
+            
+            // Cek apakah jurnal baru atau edit yang sudah ada
+            const existingIndex = journals.findIndex(j => j.id === currentJournal.id);
+            if (existingIndex >= 0) {
+                journals[existingIndex] = currentJournal;
+            } else {
+                journals.unshift(currentJournal);
+            }
+            
+            localStorage.setItem('journals', JSON.stringify(journals));
+            loadJournalEntries();
+            alert('Jurnal berhasil disimpan!');
+        }
+
+        // Muat daftar entri jurnal
+        function loadJournalEntries() {
+            journalEntriesEl.innerHTML = '';
+            
+            if (journals.length === 0) {
+                journalEntriesEl.innerHTML = '<div class="empty-message">Belum ada entri jurnal</div>';
+                return;
+            }
+            
+            journals.forEach(journal => {
+                const journalItem = document.createElement('div');
+                journalItem.className = 'journal-item';
+                journalItem.innerHTML = `
+                    <div class="journal-date">${formatDate(new Date(journal.date))}</div>
+                    <div class="journal-preview">${journal.title}: ${journal.content.substring(0, 50)}...</div>
+                `;
+                
+                journalItem.addEventListener('click', () => loadJournal(journal.id));
+                journalEntriesEl.appendChild(journalItem);
+            });
+        }
+
+        // Muat jurnal tertentu
+        function loadJournal(journalId) {
+            const journal = journals.find(j => j.id === journalId);
+            if (!journal) return;
+            
+            currentJournal = journal;
+            journalTitleEl.textContent = journal.title;
+            journalTextEl.value = journal.content;
+            journalDateEl.textContent = formatDate(new Date(journal.date));
+            
+            // Set mood
+            const moodIndex = Array.from(moodOptions).findIndex(opt => 
+                opt.getAttribute('data-mood') === journal.mood);
+            if (moodIndex >= 0) {
+                moodOptions[moodIndex].click();
+            }
+            
+            // Set kebiasaan
+            document.getElementById('habit1').checked = journal.habits.olahraga;
+            document.getElementById('habit2').checked = journal.habits.minum_air;
+            document.getElementById('habit3').checked = journal.habits.membaca;
+            document.getElementById('habit4').checked = journal.habits.tidur_cukup;
+            document.getElementById('habit5').checked = journal.habits.meditasi;
+            document.getElementById('habit6').checked = journal.habits.makan_sehat;
+            
+            // Sembunyikan saran saat memuat jurnal lama
+            suggestionBox.style.display = 'none';
+        }
+
+        // Event listeners
+        newEntryBtn.addEventListener('click', createNewJournal);
+        saveBtn.addEventListener('click', saveJournal);
+        discardBtn.addEventListener('click', () => {
+            if (confirm('Apakah Anda yakin ingin menghapus entri ini?')) {
+                createNewJournal();
+            }
+        });
+
+        // Event listeners untuk saran
+        useSuggestionBtn.addEventListener('click', () => {
+            journalTextEl.value = suggestionText.textContent;
+            suggestionBox.style.display = 'none';
+        });
+
+        newSuggestionBtn.addEventListener('click', showSuggestion);
+
+        dismissSuggestionBtn.addEventListener('click', () => {
+            suggestionBox.style.display = 'none';
+        });
+
+        // Inisialisasi
+        createNewJournal();
+        loadJournalEntries();
+    </script>
+</body>
+</html>
